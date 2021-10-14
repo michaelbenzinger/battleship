@@ -1,7 +1,9 @@
 import factoryHelper from '../helpers/factoryhelper.js';
 
-export const shipFactory = (length, initialHits) => {
-  const hits = initialHits || [];
+// props = { length, initialHits }
+export const shipFactory = (props) => {
+  const length = props.length;
+  const hits = props.initialHits || [];
 
   const hit = (position) => {
     if (!hits.includes(position)) {
@@ -23,12 +25,13 @@ export const shipFactory = (length, initialHits) => {
 }
 
 export const gameboardFactory = (size) => {
-  const gameboard = [];
+  let board = [];
   const initialize = (() => {
     for (let i = 0; i < size; i++) {
       for (let j = 0; j < size; j++) {
-        gameboard.push({
+        board.push({
           coord: [j, i],
+          hit: 0,
           shipId: null
         })
       }
@@ -38,23 +41,51 @@ export const gameboardFactory = (size) => {
   const ships = [];
 
   const allShipsSunk = () => {
-
+    let sunk = true;
+    ships.forEach(ship => {
+      if (!ship.isSunk()) sunk = false;
+    })
+    return sunk;
   }
 
+  // shipProps = { length, initialHits }
+  // locationProps = { coord: [x, y], dir: ('e' || 's') }
   const placeShip = (shipProps, locationProps) => {
-
+    let placedShipId = null;
+    let placedCoords = undefined;
+    try {
+      placedCoords = factoryHelper.getCoordsIfOpen(
+        shipProps.length, locationProps, board);
+      placedShipId = ships.push(shipFactory(shipProps)) - 1;
+      board = board.map(cell => {
+        let newCell = cell;
+        placedCoords.forEach(coord => {
+          if (factoryHelper.arraysMatch(cell.coord, coord)) {
+            newCell = {
+              coord: coord,
+              hit: 0,
+              shipId: placedShipId
+            };
+          }
+        });
+        return newCell;
+      });
+      return true;
+    } catch (e) {
+      throw (e)
+    }
   }
 
   const receiveAttack = (position) => {
 
   }
 
-  const getGameboard = () => { return gameboard };
+  const getBoard = () => { return board };
 
   return {
     allShipsSunk,
     placeShip,
     receiveAttack,
-    getGameboard,
+    getBoard,
   }
 }

@@ -1,20 +1,34 @@
   // locationProps = { coord: [5, 5], dir: (e || s) }
   const factoryHelper = (() => {
-    const isOpen = (length, locationProps, gameboard) => {
+    const getCoordsIfOpen = (length, locationProps, board) => {
+      const coords = [];
       for (let i = 0; i < length; i++) {
-        const searchCoordinate = locationProps.coord;
+        let searchX = locationProps.coord[0];
+        let searchY = locationProps.coord[0];
         locationProps.dir === 'e'
-          ? searchCoordinate[0] += i
-          : searchCoordinate[1] += i;
-        const matchingCell = gameboard.getGameboard().find(cell => 
-          JSON.stringify(cell.coord) === JSON.stringify(searchCoordinate));
-        if (matchingCell.shipId !== null) return false;
+          ? searchX += i
+          : searchY += i;
+        const matchingCell = board.find(cell => 
+          arraysMatch(cell.coord, [searchX, searchY])
+        );
+        if (!matchingCell) throw('out of bounds');
+        else if (matchingCell.shipId !== null) throw('cell occupied')
+        else {
+          // Success
+          coords.push([searchX, searchY]);
+        }
       }
-      return true;
+      return coords;
+    }
+
+    const arraysMatch = (coord1, coord2) => {
+      return (JSON.stringify(coord1) === JSON.stringify(coord2))
+        ? true : false;
     }
 
     return {
-      isOpen,
+      arraysMatch,
+      getCoordsIfOpen,
     }
   })();
 
