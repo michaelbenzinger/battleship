@@ -1,6 +1,6 @@
-export const shipFactory = (length) => {
-  const hits = [];
-
+export const shipFactory = (length, initialHits) => {
+  const hits = initialHits || [];
+  
   const hit = (position) => {
     if (!hits.includes(position)) {
       hits.push(position);
