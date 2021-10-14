@@ -1,3 +1,5 @@
+import factoryHelper from '../helpers/factoryhelper.js';
+
 export const shipFactory = (length, initialHits) => {
   const hits = initialHits || [];
 

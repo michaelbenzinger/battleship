@@ -1,4 +1,5 @@
 import { gameboardFactory, shipFactory } from '../src/factories.js';
+import factoryHelper from '../helpers/factoryhelper.js';
 
 describe('shipFactory', () => {
   test('shipFactory.hit() adds a hit', () => {
@@ -24,3 +25,20 @@ describe('gameboardFactory', () => {
   test('gameboardFactory creates a board of the correct size', () => {
     expect(gameboardFactory(7).getGameboard().length).toBe(49);
   });
+})
+
+describe('factoryHelper', () => {
+  test('isOpen returns true on open board', () => {
+    const gameboard = gameboardFactory(10);
+    expect(factoryHelper.isOpen(
+      4,
+      {
+        coord: [3, 4],
+        dir: 'e'
+      },
+      gameboard
+    )).toBe(true);
+  });
+
+  test.todo('isOpen returns false when spot taken');
+})
