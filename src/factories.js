@@ -1,5 +1,41 @@
 import factoryHelper from '../helpers/factoryhelper.js';
 
+export const playerFactory = (myName, boardSize) => {
+  const name = myName;
+  const board = gameboardFactory(boardSize);
+  const attackedSpaces = [];
+
+  const getBoard = () => { return board; };
+
+  const getName = () => { return name; };
+
+  const attack = (coord, enemyPlayer) => {
+    let alreadyAttacked = false;
+    attackedSpaces.forEach(cell => {
+      if (factoryHelper.arraysMatch(cell, coord)) {
+        alreadyAttacked = true;
+      }
+    })
+    if (!alreadyAttacked) {
+      try {
+        enemyPlayer.getBoard().receiveAttack(coord);
+        attackedSpaces.push(coord);
+        return true;
+      } catch (e) {
+        throw (e);
+      }
+    } else {
+      throw('already attacked');
+    }
+  }
+
+  return {
+    getBoard,
+    getName,
+    attack,
+  }
+}
+
 // props = { length, initialHits }
 export const shipFactory = (props) => {
   const length = props.length;

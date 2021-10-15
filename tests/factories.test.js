@@ -1,5 +1,30 @@
-import { gameboardFactory, shipFactory } from '../src/factories.js';
+import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.js';
 import factoryHelper from '../helpers/factoryhelper.js';
+
+describe('playerFactory', () => {
+  test('players can attack each other', () => {
+    const player1 = playerFactory('P1', 10);
+    const player2 = playerFactory('P2', 10);
+    expect(player1.attack([3, 3], player2)).toBe(true);
+  });
+
+  test('players attacking invalid space', () => {
+    const player1 = playerFactory('P1', 10);
+    const player2 = playerFactory('P2', 10);
+    expect(() => {
+      player1.attack([11, 14], player2);
+    }).toThrow('getIndex...: out of bounds');
+  });
+
+  test('players attacking an already attacked space', () => {
+    const player1 = playerFactory('P1', 10);
+    const player2 = playerFactory('P2', 10);
+    expect(() => {
+      player1.attack([5, 5], player2);
+      player1.attack([5, 5], player2);
+    }).toThrow('already attacked');
+  });
+});
 
 describe('shipFactory', () => {
   test('shipFactory.hit() adds a hit', () => {
