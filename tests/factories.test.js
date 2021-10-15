@@ -60,13 +60,28 @@ describe('gameboardFactory', () => {
         length: 4,
         initialHits: [
           [0, 0],
-          [0, 1],
-          [0, 2],
-          [0, 3]
+          [1, 0],
+          [2, 0],
+          [3, 0]
         ]
       },
       {
         coord: [0, 0],
+        dir: 'e'
+      }
+    );
+    board.placeShip(
+      {
+        length: 4,
+        initialHits: [
+          [2, 2],
+          [3, 2],
+          [4, 2],
+          [5, 2]
+        ]
+      },
+      {
+        coord: [2, 2],
         dir: 'e'
       }
     );
@@ -124,6 +139,59 @@ describe('gameboardFactory', () => {
       );
     }).toThrow('cell occupied');
   });
+
+  test('gameboardFactory.receiveAttack() properly attacks', () => {
+    const gameboard = gameboardFactory(5);
+    gameboard.placeShip(
+      {
+        length: 3
+      },
+      {
+        coord: [0, 0],
+        dir: 'e'
+      }
+    );
+    expect(gameboard.receiveAttack([2, 0])).toBe(true);
+  });
+
+  test('gameboardFactory.receiveAttack() properly misses', () => {
+    const gameboard = gameboardFactory(5);
+    gameboard.placeShip(
+      {
+        length: 3
+      },
+      {
+        coord: [0, 0],
+        dir: 'e'
+      }
+    );
+    expect(gameboard.receiveAttack([0, 2])).toBe(false);
+  });
+
+  test('gameboardFactory.receiveAttack() throws already hit (1)', () => {
+    const gameboard = gameboardFactory(10);
+    gameboard.placeShip(
+      {
+        length: 5
+      },
+      {
+        coord: [1, 1],
+        dir: 's'
+      }
+    );
+    gameboard.receiveAttack([1, 3]);
+    expect(() => {
+      gameboard.receiveAttack([1, 3]);
+    }).toThrow('already hit');
+  });
+
+  test('gameboardFactory.receiveAttack() throws already hit (2)', () => {
+    const gameboard = gameboardFactory(10);
+    gameboard.receiveAttack([4, 7]);
+    expect(() => {
+      gameboard.receiveAttack([4, 7]);
+    }).toThrow('already hit');
+  });
 })
 
 describe('factoryHelper', () => {
@@ -151,5 +219,19 @@ describe('factoryHelper', () => {
         gameboard.getBoard()
       )
     }).toThrow('out of bounds');
+  });
+
+  test('getIndexFromCoord works', () => {
+    const gameboard = gameboardFactory(5);
+    expect(() => {
+      factoryHelper.getIndexFromCoord([4, 4], gameboard.getBoard())
+    }).not.toThrow();
+  });
+
+  test('getIndexFromCoord throw out of bounds error', () => {
+    const gameboard = gameboardFactory(10);
+    expect(() => {
+      factoryHelper.getIndexFromCoord([9, 10], gameboard.getBoard())
+    }).toThrow('getIndex...: out of bounds');
   });
 })

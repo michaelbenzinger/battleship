@@ -5,9 +5,9 @@ export const shipFactory = (props) => {
   const length = props.length;
   const hits = props.initialHits || [];
 
-  const hit = (position) => {
-    if (!hits.includes(position)) {
-      hits.push(position);
+  const hit = (coord) => {
+    if (!hits.includes(coord)) {
+      hits.push(coord);
       return true;
     } else {
       return false;
@@ -76,8 +76,20 @@ export const gameboardFactory = (size) => {
     }
   }
 
-  const receiveAttack = (position) => {
-
+  const receiveAttack = (coord) => {
+    const index = factoryHelper.getIndexFromCoord(coord, board);
+    if (board[index].hit !== 0) {
+      throw('already hit');
+    }
+    const shipId = board[index].shipId;
+    if (shipId === null) {
+      board[index].hit = -1;
+      return false;
+    } else {
+      board[index].hit = 1;
+      ships[shipId].hit(coord);
+      return true;
+    }
   }
 
   const getBoard = () => { return board };
