@@ -1,0 +1,29 @@
+#page-container {
+  height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+#game-container {
+  background-color: gray;
+}
+.grid {
+  margin: 2rem;
+  display: grid;
+  gap: 1px;
+  border: 1px solid black;
+}
+.enemy-grid {
+  width: 30vh;
+  height: 30vh;
+  background-color: black;
+}
+.player-grid {
+  width: 40vh;
+  height: 40vh;
+  background-color: black;
+}
+.grid-cell {
+  background-color: white;
+}

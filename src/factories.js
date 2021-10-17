@@ -1,11 +1,11 @@
-import factoryHelper from '../helpers/factoryhelper.js';
+import factoryHelper from '../src/helpers/factoryhelper.js';
 
 export const playerFactory = (myName, boardSize) => {
   const name = myName;
-  const board = gameboardFactory(boardSize);
+  const gameboard = gameboardFactory(boardSize);
   const attackedSpaces = [];
 
-  const getBoard = () => { return board; };
+  const getGameboard = () => { return gameboard; };
 
   const getName = () => { return name; };
 
@@ -18,7 +18,7 @@ export const playerFactory = (myName, boardSize) => {
     })
     if (!alreadyAttacked) {
       try {
-        enemyPlayer.getBoard().receiveAttack(coord);
+        enemyPlayer.getGameboard().receiveAttack(coord);
         attackedSpaces.push(coord);
         return true;
       } catch (e) {
@@ -30,7 +30,7 @@ export const playerFactory = (myName, boardSize) => {
   }
 
   return {
-    getBoard,
+    getGameboard,
     getName,
     attack,
   }

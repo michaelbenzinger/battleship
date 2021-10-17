@@ -1,5 +1,5 @@
 import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.js';
-import factoryHelper from '../helpers/factoryhelper.js';
+import factoryHelper from '../src/helpers/factoryhelper.js';
 
 describe('playerFactory', () => {
   test('players can attack each other', () => {

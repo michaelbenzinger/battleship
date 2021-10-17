@@ -37,10 +37,19 @@
       }
     }
 
+    const getCoordFromIndex = (index, board) => {
+      const size = Math.sqrt(board.length);
+      const x = index % size;
+      const y = Math.floor(index / size);
+      
+      return { x: x, y: y }
+    }
+
     return {
       arraysMatch,
       getCoordsIfOpen,
       getIndexFromCoord,
+      getCoordFromIndex,
     }
   })();
 
