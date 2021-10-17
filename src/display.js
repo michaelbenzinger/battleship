@@ -4,13 +4,19 @@ const display = (() => {
   const initialize = () => {
     console.log('initializing display');
 
+    const enemyGridWrapper = document.createElement('div');
+    enemyGridWrapper.classList.add('grid-wrapper', 'enemy-grid-wrapper');
     const enemyGrid = document.createElement('div');
     enemyGrid.classList.add('grid', 'enemy-grid');
+    const playerGridWrapper = document.createElement('div');
+    playerGridWrapper.classList.add('grid-wrapper', 'player-grid-wrapper');
     const playerGrid = document.createElement('div')
     playerGrid.classList.add('grid', 'player-grid');
 
-    document.querySelector('#game-container').appendChild(enemyGrid);
-    document.querySelector('#game-container').appendChild(playerGrid);
+    document.querySelector('#game-container').appendChild(enemyGridWrapper);
+    enemyGridWrapper.appendChild(enemyGrid);
+    document.querySelector('#game-container').appendChild(playerGridWrapper);
+    playerGridWrapper.appendChild(playerGrid);
   };
 
   const populateGrid = (player) => {

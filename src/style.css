@@ -1,29 +1,60 @@
+:root {
+  --page-margin: 1rem;
+  --game-background-color: lightgray;
+  --grid-color: white;
+  --grid-border-color: black;
+  --grid-border-size: 1px;
+}
+
 #page-container {
-  height: 100vh;
+  height: calc(100vh - var(--page-margin, 2rem) * 2);
+  background-color: var(--game-background-color, gray);
+  margin: var(--page-margin, 2rem);
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
 }
 #game-container {
-  background-color: gray;
+  width: calc(20rem + 10vw);
+  max-width: calc((100vh - (var(--page-margin, 2rem) * 2)) / 2.5);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+}
+.grid-wrapper {
+  position: relative;
+  background-color: white;
+  box-sizing: border-box;
 }
 .grid {
-  margin: 2rem;
+  /* margin: 2rem; */
   display: grid;
-  gap: 1px;
-  border: 1px solid black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  gap: var(--grid-border-size);
+  border: var(--grid-border-size, 1px) solid var(--grid-border-color, black);
+  box-sizing: border-box;
+}
+.enemy-grid-wrapper {
+  width: 80%;
+  padding-bottom: 80%;
+  margin-bottom: 1.5vh;
 }
 .enemy-grid {
-  width: 30vh;
-  height: 30vh;
-  background-color: black;
+  background-color: var(--grid-border-color, black);
+}
+.player-grid-wrapper {
+  width: 100%;
+  padding-bottom: 100%;
 }
 .player-grid {
-  width: 40vh;
-  height: 40vh;
-  background-color: black;
+  background-color: var(--grid-border-color, black);
 }
 .grid-cell {
-  background-color: white;
+  background-color: var(--grid-color, white);
 }
