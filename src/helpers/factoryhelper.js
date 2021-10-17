@@ -9,7 +9,7 @@
       const coords = [];
       for (let i = 0; i < length; i++) {
         let searchX = locationProps.coord[0];
-        let searchY = locationProps.coord[0];
+        let searchY = locationProps.coord[1];
         locationProps.dir === 'e'
           ? searchX += i
           : searchY += i;

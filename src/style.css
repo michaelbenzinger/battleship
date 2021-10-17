@@ -4,8 +4,30 @@
   --grid-color: white;
   --grid-border-color: black;
   --grid-border-size: 1px;
+  /* --grid-offset: 1rem; */
 }
 
+html {
+  font-family: Helvetica, Arial, sans-serif;
+}
+h1 {
+  font-weight: 700;
+  font-size: calc(2.8vh + 0.3rem);
+  margin-block-end: 0.3rem;
+}
+h2 {
+  font-weight: 700;
+  font-size: calc(2.3vh + 0.3rem);
+  margin-block-end: 0.3rem;
+}
+h3 {
+  font-size: calc(1.8vh + 0.3rem);
+  margin-block-end: 0.3rem;
+}
+h4 {
+  font-size: calc(1.4vh + 0.3rem);
+  margin-block-end: 0.3rem;
+}
 #page-container {
   height: calc(100vh - var(--page-margin, 2rem) * 2);
   background-color: var(--game-background-color, gray);
@@ -44,6 +66,8 @@
   width: 80%;
   padding-bottom: 80%;
   margin-bottom: 1.5vh;
+  position: relative;
+  right: var(--grid-offset, 0);
 }
 .enemy-grid {
   background-color: var(--grid-border-color, black);
@@ -51,6 +75,8 @@
 .player-grid-wrapper {
   width: 100%;
   padding-bottom: 100%;
+  position: relative;
+  left: var(--grid-offset, 0);
 }
 .player-grid {
   background-color: var(--grid-border-color, black);
