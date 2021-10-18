@@ -1,6 +1,13 @@
 :root {
   --page-margin: 1rem;
   --game-background-color: lightgray;
+  --hover-light-blue: rgb(131, 174, 238);
+  --hover-blue: dodgerBlue;
+  --hover-crimson: crimson;
+  --hover-red: rgb(255, 112, 112);
+  --hover-gold: gold;
+  --hover-yellow: rgb(255, 255, 145);
+  --ship-green: forestGreen;
   --grid-color: white;
   --grid-border-color: black;
   --grid-border-size: 1px;
@@ -83,4 +90,25 @@ h4 {
 }
 .grid-cell {
   background-color: var(--grid-color, white);
+}
+.place-hover {
+  background-color: var(--hover-light-blue, rgb(98, 151, 230));
+}
+.place-hover-solo {
+  background-color: var(--hover-blue, dodgerBlue);
+}
+.place-hover-oob {
+  background-color: var(--hover-crimson, crimson);
+}
+.place-hover-oob-solo {
+  background-color: var(--hover-red, red);
+}
+.place-hover-occupied {
+  background-color: var(--hover-yellow, yellow);
+}
+.place-hover-occupied-solo {
+  background-color: var(--hover-gold, gold);
+}
+.ship-standing {
+  background-color: var(--ship-green, forestGreen);
 }
