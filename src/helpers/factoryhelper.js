@@ -121,10 +121,12 @@ const factoryHelper = (() => {
   }
 
   const sunkMessage = (coord, gameboard, target) => {
-    if (coord.x) {
+    console.log( {coord, gameboard, target });
+    if (coord.x !== undefined) {
       coord = [coord.x, coord.y];
     }
     const index = getIndexFromCoord(coord, gameboard.getBoard());
+    console.log(index);
     const shipId = gameboard.getBoard()[index].shipId;
     const attacker = (target === 'enemy'
       ? 'You'

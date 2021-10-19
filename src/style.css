@@ -1,5 +1,8 @@
 :root {
   --page-margin: 1rem;
+  --info-area-background: white;
+  --grid-color: white;
+  --game-box: #EEE;
   --game-background-color: lightgray;
   --hover-light-blue: rgb(131, 174, 238);
   --hover-blue: dodgerBlue;
@@ -8,9 +11,10 @@
   --hover-gold: gold;
   --hover-yellow: rgb(255, 255, 145);
   --ship-green: forestGreen;
-  --grid-color: white;
   --grid-border-color: black;
   --grid-border-size: 1px;
+  --ui-text-dark: rgb(14, 35, 129);
+  --ui-text-med: rgb(56, 81, 163);
   /* --grid-offset: 1rem; */
 }
 
@@ -19,46 +23,48 @@ html {
 }
 h1 {
   font-weight: 700;
-  font-size: calc(2.8vh + 0.3rem);
+  /* font-size: calc(2.8vh + 0.3rem); */
+  font-size: 1.8rem;
   margin-block-end: 0.3rem;
 }
 h2 {
   font-weight: 700;
-  font-size: calc(2.3vh + 0.3rem);
+  /* font-size: calc(2.3vh + 0.3rem); */
+  font-size: 1.4rem;
   margin-block-end: 0.3rem;
 }
 h3 {
-  font-size: calc(1.8vh + 0.3rem);
+  /* font-size: calc(1.8vh + 0.3rem); */
+  font-size: 1.1rem;
   margin-block-end: 0.3rem;
 }
 h4 {
-  font-size: calc(1.4vh + 0.3rem);
+  /* font-size: calc(1.4vh + 0.3rem); */
+  font-size: 1rem;
   margin-block-end: 0.3rem;
 }
 #page-container {
+  width: calc(100vw - var(--page-margin, 2rem) * 2);
   height: calc(100vh - var(--page-margin, 2rem) * 2);
   background-color: var(--game-background-color, gray);
   margin: var(--page-margin, 2rem);
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
 }
 #game-container {
-  width: calc(20rem + 10vw);
-  max-width: calc((100vh - (var(--page-margin, 2rem) * 2)) / 2.5);
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  justify-content: space-between;
   align-items: flex-start;
-  box-sizing: border-box;
+  width: 40rem;
+  margin: 0 auto;
+  padding-top: 5rem;
+}
+#boards-container {
+
 }
 .grid-wrapper {
-  position: relative;
   background-color: white;
-  box-sizing: border-box;
 }
 .grid {
-  /* margin: 2rem; */
   display: grid;
   top: 0;
   left: 0;
@@ -70,8 +76,8 @@ h4 {
   box-sizing: border-box;
 }
 .enemy-grid-wrapper {
-  width: 80%;
-  padding-bottom: 80%;
+  width: 17rem;
+  padding-bottom: 17rem;
   margin-bottom: 1.5vh;
   position: relative;
   right: var(--grid-offset, 0);
@@ -80,35 +86,76 @@ h4 {
   background-color: var(--grid-border-color, black);
 }
 .player-grid-wrapper {
-  width: 100%;
-  padding-bottom: 100%;
+  width: 20rem;
+  padding-bottom: 20rem;
   position: relative;
   left: var(--grid-offset, 0);
 }
 .player-grid {
   background-color: var(--grid-border-color, black);
 }
+.grid-label {
+  /* height: 2rem; */
+}
+.enemy-area .grid-label {
+  display: inline-block;
+}
+.enemy-delay-toggle {
+  display: inline-block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-left: 0.8rem;
+  cursor: pointer;
+  color: var(--ui-text-dark, darkblue);
+}
+.enemy-delay-toggle:hover {
+  color: var(--ui-text-med, blue);
+}
+.enemy-area {
+  margin-right: 1rem;
+}
+.player-area {
+
+}
 .grid-cell {
   /* transition: background-color 0.3; */
   border: calc(var(--grid-border-size) / 2) solid var(--grid-border-color);
   background-color: var(--grid-color, white);
+  box-sizing: border-box;
+}
+.enemy-grid .grid-cell-unclicked {
+  transform: scale(1, 1);
+  transition: transform 0.06s, background-color 0.1s;
+}
+.enemy-grid .grid-cell-unclicked:hover {
+  cursor: pointer;
+  /* background-color: var(--game-background-color, lightgray); */
+  position: relative;
+  /* box-shadow: inset 0px 0px 0px 0.5px black,
+              0px 0.2rem 0.3rem 0 rgba(0,0,0,0.3); */
+  box-shadow: 0px 0.2rem 0.3rem 0 rgba(0,0,0,0.3);
+  transform: scale(1.25, 1.25);
+  z-index: 2;
 }
 .place-hover {
   background-color: var(--hover-light-blue, rgb(98, 151, 230));
 }
 .place-hover-solo {
+  cursor: pointer;
   background-color: var(--hover-blue, dodgerBlue);
 }
 .place-hover-oob {
   background-color: var(--hover-crimson, crimson);
 }
 .place-hover-oob-solo {
+  cursor: pointer;
   background-color: var(--hover-red, red);
 }
 .place-hover-occupied {
   background-color: var(--hover-yellow, yellow);
 }
 .place-hover-occupied-solo {
+  cursor: pointer;
   background-color: var(--hover-gold, gold);
 }
 .ship-standing {
@@ -131,4 +178,81 @@ h4 {
 }
 .player-hit {
 
+}
+.info-container {
+  padding: 0.5rem;
+  background-color: white;
+  width: 16rem;
+}
+.info-title {
+  font-size: 1.6rem;
+  margin-block-end: 0;
+}
+.info-state-container {
+  height: 2rem;
+}
+.info-state {
+  display: inline-block;
+  margin: 0.3rem 0 0.7rem 0;
+}
+.rotate-button, .rotate-button div {
+  display: inline-block;
+}
+.rotate-button {
+  margin-left: 0.5rem;
+  background-color: var(--game-box, #EEE);
+  padding: 0.1rem 0.4rem;
+  border-radius: 0.3rem;
+  position: absolute;
+  cursor: pointer;
+  user-select: none;
+}
+.rotate-button:hover {
+  background-color: var(--game-background-color, lightgray);
+}
+.rotate-button:active {
+  background-color: var(--info-area-background, white);
+}
+.rotate-button-text {
+  font-size: 0.9em;
+  margin-right: 0.4rem;
+}
+.rotate-button-icon {
+  background-color: var(--info-area-background, white);
+  font-size: 1.1rem;
+  padding: 0.05rem 0.5rem;
+  border: 1px solid black;
+  border-radius: 0.2rem;
+}
+.info-details {
+  height: 15rem;
+  overflow: auto;
+  margin-bottom: 0.3rem;
+}
+.info-remaining {
+  height: 6rem;
+  font-size: 0.9rem;
+  background-color: var(--game-box, #EEE);
+  padding: 0.3rem 0.2rem;
+  margin-bottom: 0.1rem;
+}
+.info-remaining-title {
+  font-size: 1rem;
+  font-weight: 700;
+}
+.info-remaining-list {
+
+}
+.remaining-ship {
+  display: inline-block;
+  font-size: 0.9rem;
+  background-color: var(--info-area-background, white);
+  padding: 0.3rem 0.2rem;
+  margin: 0 0.3rem 0.2rem 0;
+}
+.info-details-message {
+  font-size: 0.9rem;
+  background-color: var(--game-box, #EEE);
+  padding: 0.3rem 0.2rem;
+  margin-bottom: 0.1rem;
 }

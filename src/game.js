@@ -3,26 +3,28 @@ import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.j
 import factoryHelper from './helpers/factoryhelper.js';
 
 const game = (() => {
+  const enemyDelayMaxInitial = 2;
+  let enemyDelayMax = 0;
   const states = [
     {
       id: 0,
       target: null,
-      name: 'Place your ships.'
+      name: 'Place your ships'
     },
     {
       id: 1,
       target: 'enemy',
-      name: "Player's turn."
+      name: "Player's turn"
     },
     {
       id: 2,
       target: 'player',
-      name: "Enemy's turn."
+      name: "Enemy's turn"
     },
     {
       id: 3,
       target: null,
-      name: "Game finished."
+      name: "Game finished"
     }
   ];
   let possibleEnemyAttacks = null;
@@ -48,6 +50,9 @@ const game = (() => {
     display.drawGrid(enemy1);
 
     placeRandomShips(enemy1);
+    direction = 'e';
+    display.displayRotateButton();
+    display.logMessage('Place your ' + shipList[currentShip].name);
   };
 
   const getShipForPlacement = () => {
@@ -57,29 +62,50 @@ const game = (() => {
   const advanceShipPlacement = () => {
     if (currentShip < 4) {
       currentShip ++;
+      display.logMessage('Place your ' + shipList[currentShip].name);
       return 0;
     } else {
-      state = states[1];
+      display.logRemaining(enemy1.getGameboard().getShips());
+      display.makeCellsUnclicked();
+      advanceState();
       return 1;
     }
   }
 
   const advanceState = () => {
     if (player1.getGameboard().allShipsSunk()) {
-      alert('Enemy wins!');
+      display.logMessage('Enemy wins.');
+      display.removeCellsUnclicked();
       state = states[3];
 
     } else if (enemy1.getGameboard().allShipsSunk()) {
-      alert('Player wins!');
+      display.logMessage('You win!');
+      display.removeCellsUnclicked();
       state = states[3];
     } else {
-      if (state.id === 1) {
+      if (state.id === 0) {
+        display.removeRotateButton();
+        state = states[1];
+      } else if (state.id === 1) {
+        display.removeCellsUnclicked();
         state = states[2];
-        enemyRandomAttack();
+        const delayTime = (enemyDelayMax / 4 +
+            (Math.random() * enemyDelayMax * 3 / 4));
+        console.log('Delaying ' + delayTime + ' seconds');
+        if (delayTime !== 0) {
+          setTimeout(() => {
+            enemyRandomAttack();
+          }, 1000 * delayTime);
+        } else {
+          enemyRandomAttack();
+        }
       } else {
+        display.makeCellsUnclicked();
         state = states[1];
       }
     }
+
+    display.stateMessage(state.name);
   }
 
   const getState = () => {
@@ -150,10 +176,20 @@ const game = (() => {
       playerGrid.childNodes.item(attackCellIndex).classList.add('miss', 'player-miss');
     }
     if (didHit === 2) {
-      console.log(factoryHelper.sunkMessage(attackCell.coord, player1.getGameboard(),
-        state.target));
+      display.logMessage(factoryHelper.sunkMessage(attackCell.coord,
+        player1.getGameboard(), game.getState().target))
     }
     advanceState();
+  }
+
+  const toggleDelay = () => {
+    if (enemyDelayMax === 0) {
+      enemyDelayMax = enemyDelayMaxInitial;
+      return 'delay on';
+    } else {
+      enemyDelayMax = 0;
+      return 'delay off';
+    }
   }
 
   return {
@@ -165,6 +201,7 @@ const game = (() => {
     getDirection,
     toggleDirection,
     getPlayers,
+    toggleDelay,
   }
 })();
 

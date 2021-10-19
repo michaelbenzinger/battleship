@@ -16,27 +16,77 @@ const display = (() => {
     'place-hover-oob-solo'
   ];
   const initialize = () => {
+    const enemyArea = document.createElement('div');
+    enemyArea.classList.add('enemy-area');
     const enemyGridWrapper = document.createElement('div');
     enemyGridWrapper.classList.add('grid-wrapper', 'enemy-grid-wrapper');
     const enemyGridLabel = document.createElement('h3');
+    enemyGridLabel.classList.add('grid-label');
     enemyGridLabel.innerText = 'Enemy';
+    const enemyDelayToggle = document.createElement('h4');
+    enemyDelayToggle.classList.add('enemy-delay-toggle');
+
+    enemyDelayToggle.innerText = game.toggleDelay();
+    enemyDelayToggle.addEventListener('click', (e) => {
+      e.target.innerText = game.toggleDelay();
+    });
+
     const enemyGrid = document.createElement('div');
     enemyGrid.classList.add('grid', 'enemy-grid');
+
+    const playerArea = document.createElement('div');
+    playerArea.classList.add('player-area');
     const playerGridWrapper = document.createElement('div');
     playerGridWrapper.classList.add('grid-wrapper', 'player-grid-wrapper');
     const playerGridLabel = document.createElement('h2');
+    playerGridLabel.classList.add('grid-label');
     playerGridLabel.innerText = 'Player';
     const playerGrid = document.createElement('div')
     playerGrid.classList.add('grid', 'player-grid');
 
+    const boardsContainer = document.createElement('div');
+    boardsContainer.classList.add('boards-container');
+    const infoContainer = document.createElement('div');
+    infoContainer.classList.add('info-container');
     const gameContainer = document.createElement('div');
     gameContainer.id = 'game-container';
 
-    gameContainer.appendChild(enemyGridLabel);
-    gameContainer.appendChild(enemyGridWrapper);
+    const infoTitle = document.createElement('h1');
+    infoTitle.classList.add('info-title');
+    infoTitle.innerText = 'Battleships';
+    const infoStateContainer = document.createElement('div');
+    infoStateContainer.classList.add('info-state-container');
+    const infoState = document.createElement('p');
+    infoState.classList.add('info-state');
+    infoState.innerText = game.getState().name;
+    const infoDetails = document.createElement('div');
+    infoDetails.classList.add('info-details');
+    const infoRemaining = document.createElement('div');
+    infoRemaining.classList.add('info-remaining');
+
+    const infoRemainingTitle = document.createElement('h3');
+    infoRemainingTitle.classList.add('info-remaining-title');
+    infoRemainingTitle.innerText = 'Remaining Enemy Ships';
+    infoRemaining.appendChild(infoRemainingTitle);
+
+    infoContainer.appendChild(infoTitle);
+    infoStateContainer.appendChild(infoState);
+    infoContainer.appendChild(infoStateContainer);
+    infoContainer.appendChild(infoDetails);
+    infoContainer.appendChild(infoRemaining);
+
+    gameContainer.appendChild(boardsContainer);
+    gameContainer.appendChild(infoContainer);
+
+    boardsContainer.appendChild(enemyArea);
+    enemyArea.appendChild(enemyGridLabel);
+    enemyArea.appendChild(enemyDelayToggle);
+    enemyArea.appendChild(enemyGridWrapper);
     enemyGridWrapper.appendChild(enemyGrid);
-    gameContainer.appendChild(playerGridLabel);
-    gameContainer.appendChild(playerGridWrapper);
+
+    boardsContainer.appendChild(playerArea);
+    playerArea.appendChild(playerGridLabel);
+    playerArea.appendChild(playerGridWrapper);
     playerGridWrapper.appendChild(playerGrid);
 
     const pageContainer = document.querySelector('#page-container');
@@ -109,14 +159,16 @@ const display = (() => {
             const isHit = gameboard.receiveAttack([coord.x, coord.y]);
             // console.log(name + ' ' + displayCoord(i, gameboard.getBoard())
             //   + ' ' + (isHit ? 'hit!' : 'missed'));
+            cell.classList.remove('grid-cell-unclicked');
             if (isHit > 0) {
               cell.classList.add('hit', 'enemy-hit');
             } else {
               cell.classList.add('miss', 'enemy-miss');
             }
             if (isHit === 2) {
-              console.log(factoryHelper.sunkMessage(coord, gameboard,
-                game.getState().target));
+              logMessage(factoryHelper.sunkMessage(coord, gameboard, game.getState().
+                target))
+              logRemaining(player.getGameboard().getShips());
             }
             game.advanceState();
           }
@@ -230,9 +282,111 @@ const display = (() => {
     });
   }
 
+  const logMessage = (msg) => {
+    const infoDetails = document.querySelector('.info-details');
+    const currentMessage = infoDetails.firstChild;
+    const message = document.createElement('p');
+    message.classList.add('info-details-message');
+    message.innerText = msg;
+
+    if (currentMessage) {
+      infoDetails.insertBefore(message, currentMessage);
+    } else {
+      infoDetails.appendChild(message);
+    }
+
+  }
+
+  const logRemaining = (ships) => {
+    const infoContainer = document.querySelector('.info-container');
+    const prevInfoRemaining = document.querySelector('.info-remaining');
+    if (prevInfoRemaining) infoContainer.removeChild(prevInfoRemaining);
+
+    const infoRemaining = document.createElement('div');
+    infoRemaining.classList.add('info-remaining');
+    infoContainer.appendChild(infoRemaining);
+
+    const infoRemainingTitle = document.createElement('h3');
+    infoRemainingTitle.classList.add('info-remaining-title');
+    infoRemainingTitle.innerText = 'Remaining Enemy Ships';
+    infoRemaining.appendChild(infoRemainingTitle);
+
+    const infoRemainingList = document.createElement('div');
+    infoRemainingList.classList.add('info-remaining-list');
+    infoRemaining.appendChild(infoRemainingList);
+
+    ships.forEach(ship => {
+      if (!ship.isSunk()) {
+        const remainingShip = document.createElement('div');
+        remainingShip.classList.add('remaining-ship');
+        remainingShip.innerText += ` ${ship.getName()} (${ship.getLength()})`;
+
+        infoRemainingList.appendChild(remainingShip);
+      }
+    });
+
+    // const listStr = infoRemainingList.innerText;
+    // infoRemainingList.innerText = listStr.substring(0, listStr.length - 1);
+  }
+
+  const stateMessage = (msg) => {
+    const infoState = document.querySelector('.info-state');
+    infoState.innerText = msg;
+  }
+
+  const displayRotateButton = () => {
+    const rotateButton = document.createElement('div');
+    rotateButton.classList.add('rotate-button');
+
+    const rotateButtonText = document.createElement('div');
+    rotateButtonText.classList.add('rotate-button-text');
+    rotateButtonText.innerText = 'Rotate';
+
+    const rotateButtonIcon = document.createElement('div');
+    rotateButtonIcon.classList.add('rotate-button-icon');
+    rotateButtonIcon.innerText = '.';
+
+    rotateButton.appendChild(rotateButtonText);
+    rotateButton.appendChild(rotateButtonIcon);
+    document.querySelector('.info-state-container').appendChild(rotateButton);
+
+    rotateButton.addEventListener('click', (e) => {
+      game.toggleDirection();
+      const horVer = (game.getDirection() === 'e'
+        ? 'horizontal'
+        : 'vertical');
+      logMessage('Rotated direction to ' + horVer);
+    });
+  }
+
+  const removeRotateButton = () => {
+    document.querySelector('.rotate-button').remove();
+  }
+
+  const makeCellsUnclicked = () => {
+    document.querySelector('.enemy-grid').childNodes.forEach(cell => {
+      if (cell.classList.length === 1) {
+        cell.classList.add('grid-cell-unclicked');
+      }
+    });
+  }
+
+  const removeCellsUnclicked = () => {
+    document.querySelector('.enemy-grid').childNodes.forEach(cell => {
+      cell.classList.remove('grid-cell-unclicked');
+    });
+  }
+
   return {
     initialize,
     drawGrid,
+    logMessage,
+    stateMessage,
+    logRemaining,
+    displayRotateButton,
+    removeRotateButton,
+    makeCellsUnclicked,
+    removeCellsUnclicked,
   }
 })();
 
