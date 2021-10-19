@@ -36,10 +36,11 @@ export const playerFactory = (myName, boardSize) => {
   }
 }
 
-// props = { length, initialHits }
+// props = { length, initialHits, name }
 export const shipFactory = (props) => {
   const length = props.length;
   const hits = props.initialHits || [];
+  const name = props.name;
 
   const hit = (coord) => {
     if (!hits.includes(coord)) {
@@ -54,9 +55,15 @@ export const shipFactory = (props) => {
     return hits.length === length;
   }
 
+  const getLength = () => { return length };
+
+  const getName = () => { return name };
+
   return {
     hit,
     isSunk,
+    getLength,
+    getName,
   }
 }
 
@@ -120,13 +127,19 @@ export const gameboardFactory = (size) => {
     const shipId = board[index].shipId;
     if (shipId === null) {
       board[index].hit = -1;
-      return false;
+      return 0;
     } else {
       board[index].hit = 1;
       ships[shipId].hit(coord);
-      return true;
+      if (ships[shipId].isSunk()) {
+        return 2;
+      } else {
+        return 1;
+      }
     }
   }
+
+  const getShips = () => { return ships };
 
   const getBoard = () => { return board };
 
@@ -134,6 +147,7 @@ export const gameboardFactory = (size) => {
     allShipsSunk,
     placeShip,
     receiveAttack,
+    getShips,
     getBoard,
   }
 }

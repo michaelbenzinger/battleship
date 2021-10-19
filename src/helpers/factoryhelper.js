@@ -120,6 +120,20 @@ const factoryHelper = (() => {
     return newList;
   }
 
+  const sunkMessage = (coord, gameboard, target) => {
+    if (coord.x) {
+      coord = [coord.x, coord.y];
+    }
+    const index = getIndexFromCoord(coord, gameboard.getBoard());
+    const shipId = gameboard.getBoard()[index].shipId;
+    const attacker = (target === 'enemy'
+      ? 'You'
+      : 'Enemy');
+    const shipName = gameboard.getShips()[shipId].getName();
+    const shipSize = gameboard.getShips()[shipId].getLength();
+    return attacker + ' sunk the ' + shipName + '! (size: ' + shipSize + ')';
+  }
+
   return {
     arraysMatch,
     checkIfOpen,
@@ -129,6 +143,7 @@ const factoryHelper = (() => {
     getCoordFromIndex,
     nudgeCoordsBy,
     nudgeCoordsOn,
+    sunkMessage,
   }
 })();
 

@@ -1,5 +1,6 @@
 import display from './display.js';
 import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.js';
+import factoryHelper from './helpers/factoryhelper.js';
 
 const game = (() => {
   const states = [
@@ -59,7 +60,6 @@ const game = (() => {
       return 0;
     } else {
       state = states[1];
-      console.log(state.name);
       return 1;
     }
   }
@@ -80,7 +80,6 @@ const game = (() => {
         state = states[1];
       }
     }
-    console.log(state.name);
   }
 
   const getState = () => {
@@ -121,7 +120,8 @@ const game = (() => {
         try {
           if (player.getGameboard().placeShip(
             {
-              length: ship.size
+              length: ship.size,
+              name: ship.name
             },
             {
               coord: [coordX, coordY],
@@ -131,7 +131,7 @@ const game = (() => {
             success = true;
           }
         } catch {
-          console.log('Failed to place a ship');
+          console.log('Failed to place a ship, trying again');
         }
       }
     });
@@ -140,7 +140,19 @@ const game = (() => {
   const enemyRandomAttack = () => {
     const attackIndex = Math.floor(Math.random() * possibleEnemyAttacks.length);
     const attackCell = possibleEnemyAttacks.splice(attackIndex, 1)[0];
-    player1.getGameboard().receiveAttack(attackCell.coord);
+    const didHit = player1.getGameboard().receiveAttack(attackCell.coord);
+    const playerGrid = document.querySelector('.player-grid');
+    const attackCellIndex = factoryHelper.getIndexFromCoord(attackCell.coord, player1.
+      getGameboard().getBoard());
+    if (didHit > 0) {
+      playerGrid.childNodes.item(attackCellIndex).classList.add('hit', 'player-hit');
+    } else {
+      playerGrid.childNodes.item(attackCellIndex).classList.add('miss', 'player-miss');
+    }
+    if (didHit === 2) {
+      console.log(factoryHelper.sunkMessage(attackCell.coord, player1.getGameboard(),
+        state.target));
+    }
     advanceState();
   }
 

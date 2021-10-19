@@ -176,7 +176,7 @@ describe('gameboardFactory', () => {
         dir: 'e'
       }
     );
-    expect(gameboard.receiveAttack([2, 0])).toBe(true);
+    expect(gameboard.receiveAttack([2, 0])).toBe(1);
   });
 
   test('gameboardFactory.receiveAttack() properly misses', () => {
@@ -190,7 +190,7 @@ describe('gameboardFactory', () => {
         dir: 'e'
       }
     );
-    expect(gameboard.receiveAttack([0, 2])).toBe(false);
+    expect(gameboard.receiveAttack([0, 2])).toBe(0);
   });
 
   test('gameboardFactory.receiveAttack() throws already hit (1)', () => {

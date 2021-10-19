@@ -114,3 +114,21 @@ h4 {
 .ship-standing {
   background-color: var(--ship-green, forestGreen);
 }
+.hit {
+  background-color: purple;
+}
+.enemy-hit {
+
+}
+.player-hit {
+
+}
+.miss {
+  background-color: black;
+}
+.enemy-miss {
+
+}
+.player-hit {
+
+}

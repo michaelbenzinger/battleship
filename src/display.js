@@ -85,7 +85,8 @@ const display = (() => {
               // place ship
               gameboard.placeShip(
                 {
-                  length: currentShip.size
+                  length: currentShip.size,
+                  name: currentShip.name
                 },
                 {
                   coord: sharedCoordList[0],
@@ -106,9 +107,17 @@ const display = (() => {
           if (game.getState().target === 'enemy') {
             const coord = getCoord(i, gameboard.getBoard());
             const isHit = gameboard.receiveAttack([coord.x, coord.y]);
-            console.log(name + ' ' + displayCoord(i, gameboard.getBoard())
-              + ' ' + (isHit ? 'hit!' : 'missed'));
-            if (isHit) cell.style['background-color'] = 'red';
+            // console.log(name + ' ' + displayCoord(i, gameboard.getBoard())
+            //   + ' ' + (isHit ? 'hit!' : 'missed'));
+            if (isHit > 0) {
+              cell.classList.add('hit', 'enemy-hit');
+            } else {
+              cell.classList.add('miss', 'enemy-miss');
+            }
+            if (isHit === 2) {
+              console.log(factoryHelper.sunkMessage(coord, gameboard,
+                game.getState().target));
+            }
             game.advanceState();
           }
         });
