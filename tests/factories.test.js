@@ -13,7 +13,7 @@ describe('playerFactory', () => {
     const player2 = playerFactory('P2', 10);
     expect(() => {
       player1.attack([11, 14], player2);
-    }).toThrow('getIndex...: out of bounds');
+    }).toThrow();
   });
 
   test('players attacking an already attacked space', () => {
@@ -257,6 +257,6 @@ describe('factoryHelper', () => {
     const gameboard = gameboardFactory(10);
     expect(() => {
       factoryHelper.getIndexFromCoord([9, 10], gameboard.getBoard())
-    }).toThrow('getIndex...: out of bounds');
+    }).toThrow();
   });
 })

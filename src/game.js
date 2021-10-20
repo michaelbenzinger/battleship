@@ -165,20 +165,24 @@ const game = (() => {
   }
 
   const enemyRandomAttack = () => {
-    const attackIndex = Math.floor(Math.random() * possibleEnemyAttacks.length);
-    const attackCell = possibleEnemyAttacks.splice(attackIndex, 1)[0];
-    const didHit = player1.getGameboard().receiveAttack(attackCell.coord);
+    const attackCoord = logic.getMove(possibleEnemyAttacks);
+    console.log('COORD: ');
+    console.log({ attackCoord });
+    const didHit = player1.getGameboard().receiveAttack(attackCoord);
     const playerGrid = document.querySelector('.player-grid');
-    const attackCellIndex = factoryHelper.getIndexFromCoord(attackCell.coord, player1.
+    const attackCellIndex = factoryHelper.getIndexFromCoord(attackCoord, player1.
       getGameboard().getBoard());
     if (didHit > 0) {
       playerGrid.childNodes.item(attackCellIndex).classList.add('hit', 'player-hit');
+      logic.processHit(attackCoord);
     } else {
       playerGrid.childNodes.item(attackCellIndex).classList.add('miss', 'player-miss');
+      logic.processMiss(attackCoord);
     }
     if (didHit === 2) {
-      display.logMessage(factoryHelper.sunkMessage(attackCell.coord,
+      display.logMessage(factoryHelper.sunkMessage(attackCoord,
         player1.getGameboard(), game.getState().target))
+      logic.processSunk(attackCoord);
     }
     advanceState();
   }

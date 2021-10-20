@@ -69,10 +69,12 @@ const factoryHelper = (() => {
   }
 
   const getIndexFromCoord = (coord, board) => {
-    const index = coord[1] * Math.sqrt(board.length) + coord[0];
-    if (index > board.length - 1 || index < 0) {
-      throw('getIndex...: out of bounds');
+    if (coord[0] < 0 || coord[0] > (Math.sqrt(board.length) - 1)) {
+      throw('getIndex...: [0] is out of bounds');
+    } else if (coord[1] < 0 || coord[1] > (Math.sqrt(board.length) - 1)) {
+      throw('getIndex...: [1] is out of bounds');
     } else {
+      const index = coord[1] * Math.sqrt(board.length) + coord[0];
       return index;
     }
   }
@@ -136,10 +138,32 @@ const factoryHelper = (() => {
     return attacker + ' sunk the ' + shipName + '! (' + shipSize + ')';
   }
 
-  const getShipAtCoord = (coord, gameboard) => {
+  const getShipIdAtCoord = (coord, gameboard) => {
     const index = getIndexFromCoord(coord, gameboard.getBoard());
     const shipId = gameboard.getBoard()[index].shipId;
-    return gameboard.getShips()[shipId];
+    return shipId;
+  }
+
+  const getCoordsOfShip = (shipId, gameboard) => {
+    const board = gameboard.getBoard();
+    let shipCoords = [];
+    board.forEach(cell => {
+      if (cell.shipId === shipId) {
+        console.log('pushing ');
+        console.log(cell.coord);
+        shipCoords.push(cell.coord);
+      }
+    })
+    return shipCoords;
+  }
+
+  const isWithinBoundary = (coord, board) => {
+    if (coord[0] >= 0 && coord[0] < Math.sqrt(board.length)) {
+      if (coord[1] >= 0 && coord[1] < Math.sqrt(board.length)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   return {
@@ -152,6 +176,9 @@ const factoryHelper = (() => {
     nudgeCoordsBy,
     nudgeCoordsOn,
     sunkMessage,
+    getShipIdAtCoord,
+    getCoordsOfShip,
+    isWithinBoundary,
   }
 })();
 
