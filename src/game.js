@@ -1,6 +1,7 @@
 import display from './display.js';
 import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.js';
 import factoryHelper from './helpers/factoryhelper.js';
+import logic from './helpers/enemylogic.js';
 
 const game = (() => {
   const enemyDelayMaxInitial = 2;

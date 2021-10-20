@@ -136,6 +136,12 @@ const factoryHelper = (() => {
     return attacker + ' sunk the ' + shipName + '! (' + shipSize + ')';
   }
 
+  const getShipAtCoord = (coord, gameboard) => {
+    const index = getIndexFromCoord(coord, gameboard.getBoard());
+    const shipId = gameboard.getBoard()[index].shipId;
+    return gameboard.getShips()[shipId];
+  }
+
   return {
     arraysMatch,
     checkIfOpen,

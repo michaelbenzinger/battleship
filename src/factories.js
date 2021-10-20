@@ -141,6 +141,14 @@ export const gameboardFactory = (size) => {
 
   const getShips = () => { return ships };
 
+  const getUnsunkShips = () => {
+    const unsunkShips = [];
+    ships.forEach(ship => {
+      if (!ship.isSunk()) unsunkShips.push(ship);
+    });
+    return unsunkShips;
+  }
+
   const getBoard = () => { return board };
 
   return {
@@ -148,6 +156,7 @@ export const gameboardFactory = (size) => {
     placeShip,
     receiveAttack,
     getShips,
+    getUnsunkShips,
     getBoard,
   }
 }
