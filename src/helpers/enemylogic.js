@@ -7,6 +7,12 @@ const enemyLogic = (() => {
   // { coords, nextMoves, dAxis }
   let activeShips = [];
 
+  const reset = () => {
+    playerGameboard = null;
+    activeHits = [];
+    activeShips = [];
+  }
+
   const processHit = (coord) => {
     activeHits.push(coord);
 
@@ -267,6 +273,7 @@ const enemyLogic = (() => {
   }
 
   return {
+    reset,
     processHit,
     processMiss,
     processSunk,

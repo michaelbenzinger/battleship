@@ -30,19 +30,27 @@ const game = (() => {
   ];
   let possibleEnemyAttacks = null;
   let state = states[0];
-  const shipList = [
-    { name: 'Carrier', size: 5 },
-    { name: 'Battleship', size: 4 },
-    { name: 'Destroyer', size: 3 },
-    { name: 'Submarine', size: 3 },
-    { name: 'Patrol Boat', size: 2 }
-  ];
-  let currentShip = 0;
-  let direction = 'e';
+  let shipList;
+  let currentShip;
+  let direction;
   let player1 = null;
   let enemy1 = null;
 
   const start = () => {
+    logic.reset();
+
+    enemyDelayMax = enemyDelayMaxInitial;
+    state = states[0];
+    shipList = [
+      { name: 'Carrier', size: 5 },
+      { name: 'Battleship', size: 4 },
+      { name: 'Destroyer', size: 3 },
+      { name: 'Submarine', size: 3 },
+      { name: 'Patrol Boat', size: 2 }
+    ];
+    currentShip = 0;
+    direction = 'e';
+
     player1 = playerFactory('player', 10);
     enemy1 = playerFactory('enemy', 10);
     possibleEnemyAttacks = player1.getGameboard().getBoard();
@@ -78,11 +86,33 @@ const game = (() => {
       display.logMessage('Enemy wins.');
       display.removeCellsUnclicked();
       state = states[3];
+      display.makeModal({
+        title: 'Enemy wins.',
+        description: 'Better luck next time.',
+        buttonText: 'Play again',
+        hideButtonText: 'Hide',
+        callback: () => { 
+          display.initialize();
+          game.start();
+          console.log("You've clicked the button")
+        }
+      });
 
     } else if (enemy1.getGameboard().allShipsSunk()) {
       display.logMessage('You win!');
       display.removeCellsUnclicked();
       state = states[3];
+      display.makeModal({
+        title: 'You win!',
+        description: "You sunk all the enemy's battleships.",
+        buttonText: 'Play again',
+        hideButtonText: 'Hide',
+        callback: () => { 
+          display.initialize();
+          game.start();
+          console.log("You've clicked the button")
+        }
+      });
     } else {
       if (state.id === 0) {
         display.removeRotateButton();

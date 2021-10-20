@@ -1,10 +1,15 @@
 import game from './game.js';
 
 const animate = (() => {
-  const flipCells = [];
+  let flipCells = [];
   const animationRefresh = 0.9;
   const animationLength = 0.35;
   let flipping = false;
+
+  const reset = () => {
+    flipCells = [];
+    flipping = false;
+  }
 
   const addToFlipCells = (element) => {
     flipCells.push(element);
@@ -32,6 +37,7 @@ const animate = (() => {
   }
 
   return {
+    reset,
     addToFlipCells,
   }
 })();

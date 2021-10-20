@@ -16,6 +16,9 @@ const display = (() => {
     'place-hover-oob-solo'
   ];
   const initialize = () => {
+    clearDisplay();
+    animate.reset();
+
     const enemyArea = document.createElement('div');
     enemyArea.classList.add('enemy-area');
     const enemyGridWrapper = document.createElement('div');
@@ -26,7 +29,8 @@ const display = (() => {
     const enemyDelayToggle = document.createElement('h4');
     enemyDelayToggle.classList.add('enemy-delay-toggle');
 
-    enemyDelayToggle.innerText = game.toggleDelay();
+    // enemyDelayToggle.innerText = game.toggleDelay();
+    enemyDelayToggle.innerText = 'delay on';
     enemyDelayToggle.addEventListener('click', (e) => {
       e.target.innerText = game.toggleDelay();
     });
@@ -53,7 +57,7 @@ const display = (() => {
 
     const infoTitle = document.createElement('h1');
     infoTitle.classList.add('info-title');
-    infoTitle.innerText = 'Battleships';
+    infoTitle.innerText = 'Battleship';
     const infoStateContainer = document.createElement('div');
     infoStateContainer.classList.add('info-state-container');
     const infoState = document.createElement('p');
@@ -117,6 +121,13 @@ const display = (() => {
       }
     });
   };
+
+  const clearDisplay = () => {
+    const gameContainer = document.querySelector('#game-container');
+    if (gameContainer) {
+      gameContainer.remove();
+    }
+  }
 
   const drawGrid = (player) => {
     const name = player.getName();
@@ -390,8 +401,56 @@ const display = (() => {
     });
   }
 
+  // options = { title, description, buttonText, hideButtonText, callback }
+  const makeModal = (options) => {
+    const body = document.querySelector('body');
+    const pageContainer = document.querySelector('#page-container');
+    const gameContainer = document.querySelector('#game-container');
+
+    const modalContainer = document.createElement('div');
+    modalContainer.classList.add('modal-container');
+    const modal = document.createElement('div');
+    modal.classList.add('modal');
+    const modalTitle = document.createElement('h1');
+    modalTitle.classList.add('modal-title');
+    modalTitle.innerText = options.title;
+    const modalDescription = document.createElement('h3');
+    modalDescription.classList.add('modal-description');
+    modalDescription.innerText = options.description;
+    const modalButton = document.createElement('button');
+    modalButton.classList.add('modal-button');
+    modalButton.innerText = options.buttonText;
+    const hideModalButton = document.createElement('button');
+    hideModalButton.classList.add('hide-modal-button');
+    hideModalButton.innerText = options.hideButtonText;
+
+    modalContainer.appendChild(modal);
+    modalContainer.appendChild(hideModalButton);
+    modal.appendChild(modalTitle);
+    modal.appendChild(modalDescription);
+    modal.appendChild(modalButton);
+
+    body.insertBefore(modalContainer, pageContainer);
+
+    modalButton.addEventListener('click', (e) => {
+      options.callback();
+      modalContainer.remove();
+    });
+
+    hideModalButton.addEventListener('click', (e) => {
+      if (modal.classList.contains('modal-hidden')) {
+        modal.classList.remove('modal-hidden');
+        hideModalButton.classList.remove('modal-mostly-hidden');
+      } else {
+        modal.classList.add('modal-hidden');
+        hideModalButton.classList.add('modal-mostly-hidden');
+      }
+    });
+  }
+
   return {
     initialize,
+    clearDisplay,
     drawGrid,
     logMessage,
     stateMessage,
@@ -400,6 +459,7 @@ const display = (() => {
     removeRotateButton,
     makeCellsUnclicked,
     removeCellsUnclicked,
+    makeModal,
   }
 })();
 

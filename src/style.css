@@ -10,6 +10,7 @@
   --dark-3: rgb(32, 33, 37);
   --dark-4: rgb(53, 55, 66);
   --dark-5: rgb(71, 86, 109);
+  --modal-background: rgba(21, 21, 22, 0.8);
   --accent-1: rgb(77, 139, 255);
   --accent-2: rgb(45, 96, 204);
   --accent-3: rgb(134, 150, 184);
@@ -56,6 +57,11 @@ h4 {
 }
 p {
   font-size: var(--font-xs, 0.9rem);
+}
+button {
+  border-radius: 0.3rem;
+  cursor: pointer;
+  user-select: none;
 }
 #page-container {
   width: calc(100vw - var(--page-margin, 2rem) * 2);
@@ -293,6 +299,60 @@ p {
   background-color: var(--dark-3, #222);
   padding: 0.45rem 0.3rem;
   margin-bottom: 0.1rem;
+}
+
+.modal-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0;
+  z-index: 5;
+}
+.modal {
+  padding: 5rem 5rem 4rem 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--modal-background, rgba(30, 30, 30, 0.7));
+  transition: opacity 0.3s;
+  border-radius: 2rem;
+}
+.modal-title {
+  font-size: calc(var(--font-factor, 1.4rem) * 1.15);
+  margin-bottom: 0.7rem;
+}
+.modal-description {
+  font-size: calc(var(--font-factor, 1.4rem) * 0.75);
+  margin-bottom: 2rem;
+}
+.modal-button {
+  font-size: calc(var(--font-factor, 1.4rem) * 0.7);
+  padding: 0.3rem 1rem;
+  border-radius: 0.6rem;
+  box-sizing: border-box;
+}
+.hide-modal-button {
+  font-size: calc(var(--font-factor, 1.4rem) * 0.65);
+  padding: 0.3rem 0.8rem;
+  border-radius: 0.6rem;
+  position: relative;
+  box-sizing: border-box;
+  transition: opacity 0.3s;
+  top: 2rem;
+}
+.modal-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+.modal-mostly-hidden {
+  opacity: 0.25;
 }
 
 @media (max-width: 600px) {
