@@ -133,7 +133,7 @@ const factoryHelper = (() => {
       : 'Enemy');
     const shipName = gameboard.getShips()[shipId].getName();
     const shipSize = gameboard.getShips()[shipId].getLength();
-    return attacker + ' sunk the ' + shipName + '! (size: ' + shipSize + ')';
+    return attacker + ' sunk the ' + shipName + '! (' + shipSize + ')';
   }
 
   return {

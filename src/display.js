@@ -1,7 +1,7 @@
 import factoryHelper from './helpers/factoryhelper.js';
 import { gameboardFactory, playerFactory, shipFactory } from '../src/factories.js';
 import game from './game.js';
-
+import animate from './animate.js';
 
 const display = (() => {
   let grid = null;
@@ -69,6 +69,13 @@ const display = (() => {
     infoRemainingTitle.innerText = 'Remaining Enemy Ships';
     infoRemaining.appendChild(infoRemainingTitle);
 
+    // enemyGrid.style['background-image'] =
+    //   'url(https://source.unsplash.com/random?ocean)';
+    // setTimeout(() => {
+    //   playerGrid.style['background-image'] =
+    //     'url(https://source.unsplash.com/random?boat,battleship)';
+    // }, 5000);
+
     infoContainer.appendChild(infoTitle);
     infoStateContainer.appendChild(infoState);
     infoContainer.appendChild(infoStateContainer);
@@ -95,11 +102,16 @@ const display = (() => {
         child.remove();
       });
     }
-    document.querySelector('#page-container').appendChild(gameContainer);
+
+    pageContainer.appendChild(gameContainer);
 
     document.addEventListener('keydown', (e) => {
       if (e.key === '.') {
         game.toggleDirection();
+        const horVer = (game.getDirection() === 'e'
+          ? 'horizontal'
+          : 'vertical');
+        logMessage('Rotated direction to ' + horVer);
         clearClass(document.querySelector('.player-grid'), allHoverClasses);
         displayHover();
       }
@@ -161,6 +173,7 @@ const display = (() => {
             //   + ' ' + (isHit ? 'hit!' : 'missed'));
             cell.classList.remove('grid-cell-unclicked');
             if (isHit > 0) {
+              animate.addToFlipCells(e.target);
               cell.classList.add('hit', 'enemy-hit');
             } else {
               cell.classList.add('miss', 'enemy-miss');
