@@ -2,7 +2,7 @@
 
 The game of Battleship written in vanilla JS.
 
-🚢 [Live Preview]()
+🚢 [Live Preview](https://michaelbenzinger.github.io/battleship/)
 
 ## Challenges Presented
 
