@@ -59,6 +59,7 @@ p {
   font-size: var(--font-xs, 0.9rem);
 }
 button {
+  font-family: 'Noto Sans Mono', monospace;
   border-radius: 0.3rem;
   cursor: pointer;
   user-select: none;

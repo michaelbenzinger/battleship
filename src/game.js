@@ -4,7 +4,7 @@ import factoryHelper from './helpers/factoryhelper.js';
 import logic from './helpers/enemylogic.js';
 
 const game = (() => {
-  const enemyDelayMaxInitial = 2;
+  const enemyDelayMaxInitial = 0.8;
   let enemyDelayMax = 0;
   const states = [
     {
@@ -120,8 +120,8 @@ const game = (() => {
       } else if (state.id === 1) {
         display.removeCellsUnclicked();
         state = states[2];
-        const delayTime = (enemyDelayMax / 4 +
-            (Math.random() * enemyDelayMax * 3 / 4));
+        const delayTime = (enemyDelayMax / 2 +
+            (Math.random() * enemyDelayMax / 2));
         console.log('Delaying ' + delayTime + ' seconds');
         if (delayTime !== 0) {
           setTimeout(() => {
